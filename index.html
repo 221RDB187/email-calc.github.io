@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="pricing-data.js"></script>
+  <script src="server.js"></script> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Pricing Table</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    color: #666;
+  }
+
+  input[type="number"], input[type="email"], input[type="submit"] {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    background-color: #ffffff;
+  }
+
+  .signup-button {
+    padding: 8px 16px;
+    background-color: #1E90FF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .disclaimer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    color: #666;
+  }
+
+  .blurred {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .modal {
+    display: none; /* Hidden by default */
+    position: absolute; /* Positioned relative to the nearest positioned ancestor */
+    bottom: 10px; /* 10px from the bottom of the container */
+    right: 10px; /* 10px from the right of the container */
+    width: 300px; /* Fixed width */
+    height: 200px; /* Fixed height */
+    background-color: rgba(0,0,0,0.9); /* Opaque background */
+    color: white; /* Text color */
+    z-index: 2; /* Make sure it's above other content */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center the modal content vertically and horizontally */
+    border-radius: 8px; /* Rounded corners for better aesthetics */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Shadow for depth */
+  }
+
+  .modal-content {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+  }
+  
+</style>
+</head>
+<body>
+
+  
+
+  
+<div class="container">
+  <h2>Email Pricing Table</h2>
+  <div id="emailModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Enter your email to view all options</h3>
+      <form id="emailForm">
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </div>
+
+    <label for="subscribers">Enter number of subscribers:</label>
+    <input type="number" id="subscribers" name="subscribers" min="0" onchange="updatePrices()">
+
+    <table id="pricingTable">
+      <thead>
+        <tr>
+          <th>Email Provider</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Klaviyo</td>
+          <td id="klaviyoPrice">$0.00</td>
+          <td><a href="https://www.klaviyo.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr>
+          <td>Mailchimp</td>
+          <td id="mailchimpPrice">$0.00</td>
+          <td><a href="https://mailchimp.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr>
+          <td>Omnisend</td>
+          <td id="omnisendPrice">$0.00</td>
+          <td><a href="https://www.omnisend.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr class="blurred">
+          <td>MailerLite</td>
+          <td id="mailerlitePrice">$0.00</td>
+          <td><a href="https://www.mailerlite.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr class="blurred">
+          <td>ActiveCampaign</td>
+          <td id="activeCampaignPrice">$0.00</td>
+          <td><a href="https://www.activecampaign.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr class="blurred">
+          <td>Brevo</td>
+          <td id="brevoPrice">$0.00</td>
+          <td><a href="https://www.brevo.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+        <tr class="blurred">
+          <td>Mailjet</td>
+          <td id="mailjetPrice">$0.00</td>
+          <td><a href="https://www.mailjet.com" class="signup-button" target="_blank">Sign Up</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="disclaimer">Prices are subject to change at any time. Please check the provider's website for the most current pricing.</p>
+</div>
+
+<script>
+  document.querySelectorAll('.blurred').forEach(row => {
+      row.addEventListener('click', () => {
+          document.getElementById('emailModal').style.display = "flex"; // Show the modal on interaction
+      });
+  });
+
+  document.getElementById('emailForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      fetch('/save-email', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email})
+      })
+      .then(response => response.text())
+      .then(data => {
+          console.log('Server response:', data);
+          document.getElementById('emailModal').style.display = "none";
+          var blurredRows = document.querySelectorAll('.blurred');
+          blurredRows.forEach(row => row.classList.remove('blurred'));
+      })
+      .catch(error => console.error('Error:', error));
+  });
+
+
+
+
+
+  function updatePrices() {
+    var subscribers = parseInt(document.getElementById("subscribers").value) || 0; // Safe fallback if NaN
+
+    // Update prices for each provider
+    for (var provider in pricingData) {
+      if (pricingData.hasOwnProperty(provider)) {
+        var priceElementId = provider + "Price"; // Assumes IDs are like 'mailerlitePrice'
+        var priceElement = document.getElementById(priceElementId);
+        if (priceElement) { // Check if element exists
+          var price = calculatePrice(provider, subscribers);
+          priceElement.textContent = "$" + price.toFixed(2);
+        }
+      }
+    }
+  }
+
+function calculatePrice(provider, subscribers) {
+  var price = 0;
+
+
+
+  for (var i = 0; i < pricingData[provider].length; i++) {
+    if (subscribers >= pricingData[provider][i].subscribers) {
+      price = pricingData[provider][i].price;
+    }
+  }
+  return price;
+}
+</script>
+
+</body>
+</html>
